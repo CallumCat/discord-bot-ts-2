@@ -27,12 +27,22 @@ export class ShardsCommand implements ICommandStructure {
             return v.status
         });
         const shardDisplay: any[] = [
-            ["id", "status", "guilds", "users"]
+            ["ID", "STATUS", "GUILDS", "USERS"],
+            ["---", "---", "---", "---"]
         ];
 
+        let onlineShards = 0;
+
         for (let i = 0; i < guildData.length; i++) {
-            shardDisplay.push([i, shardStatusMap[i], guildData[i], userData[i]]);
+            shardDisplay.push([`${i}`, shardStatusMap[i], guildData[i], userData[i]]);
+            if (shardStatusMap[i] === "ONLINE") {
+                onlineShards++;
+            }
         }
-        p.msg.channel.send(`\`\`\`\n${table(shardDisplay, {align: ["l", "r", "r", "r"]})}\`\`\``);
+
+        shardDisplay.push(["---", "---", "---", "---"]);
+        shardDisplay.push([guildData.length, `${onlineShards}/${guildData.length} ONLINE`, guildData.reduce((prev, cur) => { return prev + cur }),  userData.reduce((prev, cur) => { return prev + cur })]);
+
+        p.msg.channel.send(`\`\`\`ini\n${table(shardDisplay, {align: ["r", "r", "r", "r"]})}\`\`\``);
     }
 }

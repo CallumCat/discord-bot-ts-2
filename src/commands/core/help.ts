@@ -7,7 +7,7 @@ import {BotError} from "../../utils/ErrorHandler";
 export class HelpCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "help",
-        aliases: ["h", "info"],
+        aliases: ["h"],
         description: "Get help with any command.",
         args: [{
             required: false,

@@ -24,28 +24,28 @@ export class Bot {
 
         GlobalVars.client.on("shardDisconnected", async(evt, id) => {
             Logger.log(`💎 SHARD ${id} disconnected and will not reconnect.`, "error");
-            await ShardStatusManager.update(id, "⚙ OFFLINE");
+            await ShardStatusManager.update(id, "OFFLINE");
         });
 
         GlobalVars.client.on("shardError", async(evt, id) => {
             Logger.log(`💎 SHARD ${id} is encountering a connection error.`, "warn");
-            await ShardStatusManager.update(id, "⚙ ERROR");
+            await ShardStatusManager.update(id, "ERROR");
         });
 
         GlobalVars.client.on("shardReconnecting", async(id) => {
             Logger.log(`💎 SHARD ${id} is trying to reconnect.`, "warn");
-            await ShardStatusManager.update(id, "⚙ RECONNECT");
+            await ShardStatusManager.update(id, "RECONNECT");
 
         });
 
         GlobalVars.client.on("shardResumed", async(id) => {
             Logger.log(`💎 SHARD ${id} resumed successfully.`, "success");
-            await ShardStatusManager.update(id, "✓ ONLINE");
+            await ShardStatusManager.update(id, "ONLINE");
         });
 
         GlobalVars.client.on("shardReady", async(id) => {
             Logger.log(`💎 SHARD ${id} is ready.`, "success");
-            await ShardStatusManager.update(id, "✓ ONLINE");
+            await ShardStatusManager.update(id, "ONLINE");
         });
 
         await GlobalVars.client.login(config.client.token);
