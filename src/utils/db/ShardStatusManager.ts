@@ -1,7 +1,7 @@
-import {GlobalVars} from "../global";
-import {config} from "../config/config";
-import {IShardStatus} from "../interfaces/IShardStatus";
-import {DefaultObjectCreator} from "./DefaultObjectCreator";
+import {DefaultObjectCreator} from "../DefaultObjectCreator";
+import {GlobalVars} from "../../global";
+import {IShardStatus} from "../../interfaces/IShardStatus";
+import {config} from "../../config/config";
 
 export class ShardStatusManager {
     static async resetAndSet(): Promise<void> {

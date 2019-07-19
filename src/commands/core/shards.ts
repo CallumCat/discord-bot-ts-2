@@ -2,18 +2,15 @@ import {ICommandConfig, ICommandStructure} from "../../interfaces/ICommandStruct
 import {ICommandPayload} from "../../interfaces/ICommandPayload";
 import {GlobalVars} from "../../global";
 import * as table from "text-table";
-import {ShardStatusManager} from "../../utils/ShardStatusManager";
+import {ShardStatusManager} from "../../utils/db/ShardStatusManager";
 
 export class ShardsCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "shards",
-        aliases: ["sd"],
-        description: "Get shard info",
-        args: [{
-            required: false,
-            argDescription: "The shard ID to look up",
-            argName: "shardId"
-        }],
+        shorthands: ["sd"],
+        shortDescription: "Get shard info",
+        description: "Get a table of shard statuses.",
+        args: [],
         admin: true,
         bypassCooldown: false
     };

@@ -1,4 +1,5 @@
 import {ICommandPayload} from "./ICommandPayload";
+import {PermissionString} from "discord.js";
 
 export interface ICommandStructure {
     conf: ICommandConfig;
@@ -7,11 +8,15 @@ export interface ICommandStructure {
 
 export interface ICommandConfig {
     name: string;
-    aliases: string[];
+    shorthands: string[];
     args: ICommandArgs[];
     description: string;
+    shortDescription: string;
     admin: boolean;
     bypassCooldown: boolean;
+    botRequires?: PermissionString[];
+    userRequires?: PermissionString[];
+    nsfw?: boolean
 }
 
 export interface ICommandArgs {

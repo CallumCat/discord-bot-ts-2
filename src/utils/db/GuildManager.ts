@@ -1,10 +1,10 @@
-import {IDataUtil} from "../interfaces/IData";
+import {DefaultObjectCreator} from "../DefaultObjectCreator";
+import {IDataUtil} from "../../interfaces/IData";
+import {BotError} from "../ErrorHandler";
 import {Snowflake} from "discord.js";
-import {GlobalVars} from "../global";
-import {config} from "../config/config";
-import {BotError} from "./ErrorHandler";
-import {DefaultObjectCreator} from "./DefaultObjectCreator";
-import {IGuild} from "../interfaces/IGuild";
+import {IGuild} from "../../interfaces/IGuild";
+import {GlobalVars} from "../../global";
+import {config} from "../../config/config";
 
 export class GuildManager implements IDataUtil {
     async get(id: Snowflake, returnNull?: boolean): Promise<IGuild> {

@@ -1,10 +1,10 @@
-import {IDataUtil} from "../interfaces/IData";
-import {IUser} from "../interfaces/IUser";
+import {DefaultObjectCreator} from "../DefaultObjectCreator";
+import {IDataUtil} from "../../interfaces/IData";
+import {BotError} from "../ErrorHandler";
 import {Snowflake} from "discord.js";
-import {GlobalVars} from "../global";
-import {config} from "../config/config";
-import {BotError} from "./ErrorHandler";
-import {DefaultObjectCreator} from "./DefaultObjectCreator";
+import {IUser} from "../../interfaces/IUser";
+import {GlobalVars} from "../../global";
+import {config} from "../../config/config";
 
 export class UserManager implements IDataUtil {
     async get(id: Snowflake, returnNull?: boolean): Promise<IUser> {

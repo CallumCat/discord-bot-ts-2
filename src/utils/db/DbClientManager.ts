@@ -1,5 +1,5 @@
 import {Db, MongoClient} from "mongodb";
-import {config} from "../config/config";
+import {config} from "../../config/config";
 
 export class DbClientManager {
     static async connect(): Promise<Db> {

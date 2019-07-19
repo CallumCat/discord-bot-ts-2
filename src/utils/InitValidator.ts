@@ -1,9 +1,9 @@
 import {Logger} from "./Logger";
 import {GlobalVars} from "../global";
 import {config} from "../config/config";
-import {UserManager} from "./UserManager";
-import {DefaultObjectCreator} from "./DefaultObjectCreator";
-import {ShardStatusManager} from "./ShardStatusManager";
+import {UserManager} from "./db/UserManager";
+import {ShardStatusManager} from "./db/ShardStatusManager";
+import {OptionManager} from "./db/OptionManager";
 
 export class InitValidator {
     static async checkDbForOptions() {
@@ -11,8 +11,7 @@ export class InitValidator {
         const docCount = await GlobalVars.db.collection(config.db.optionsCollection).countDocuments();
         if (docCount === 0) {
             Logger.log(`✚ No options document exists. Creating default object.`);
-            const defaultObject = DefaultObjectCreator.createOptionsObject();
-            await GlobalVars.db.collection(config.db.optionsCollection).insertOne(defaultObject);
+            await OptionManager.create();
         } else {
             Logger.log(`✚ Looks like options document exists.`);
 

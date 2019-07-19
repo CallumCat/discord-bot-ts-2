@@ -3,8 +3,8 @@ import {Logger} from "./utils/Logger";
 import {MessageHandler} from "./utils/msg/MessageHandler";
 import {ErrorHandler} from "./utils/ErrorHandler";
 import {GlobalVars} from "./global";
-import {DbClientManager} from "./utils/DbClientManager";
-import {ShardStatusManager} from "./utils/ShardStatusManager";
+import {DbClientManager} from "./utils/db/DbClientManager";
+import {ShardStatusManager} from "./utils/db/ShardStatusManager";
 
 export class Bot {
     static async start() {
@@ -46,10 +46,18 @@ export class Bot {
         GlobalVars.client.on("shardReady", async(id) => {
             Logger.log(`💎 SHARD ${id} is ready.`, "success");
             await ShardStatusManager.update(id, "ONLINE");
+
+            await GlobalVars.client.user.setPresence({
+                activity: {
+                    type: "STREAMING",
+                    url: "https://www.twitch.tv/imvysion",
+                    name: `Shard ${id} :: ${config.defaultPrefix}help`
+                },
+                shardID: id
+            })
         });
 
         await GlobalVars.client.login(config.client.token);
-
     }
 }
 

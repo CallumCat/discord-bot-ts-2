@@ -2,7 +2,7 @@ import {config} from "./config/config";
 import {GlobalVars} from "./global";
 import {Logger} from "./utils/Logger";
 import {InitValidator} from "./utils/InitValidator";
-import {DbClientManager} from "./utils/DbClientManager";
+import {DbClientManager} from "./utils/db/DbClientManager";
 
 class Application {
     static async start() {
