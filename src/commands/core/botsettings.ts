@@ -32,10 +32,10 @@ export class BotSettingsCommand implements ICommandStructure {
                 await p.msg.channel.send(`Commands are currently ${p.options.commandsEnabled ? "enabled" : "disabled"}.`);
             } else if (p.args[1].startsWith("f")) {
                 await GlobalVars.db.collection(config.db.optionsCollection).updateOne({}, { $set: {commandsEnabled: false}});
-                await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_checK_mark:", message: "Commands disabled."}));
+                await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: "Commands disabled."}));
             } else {
                 await GlobalVars.db.collection(config.db.optionsCollection).updateOne({}, { $set: {commandsEnabled: true}});
-                await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_checK_mark:", message: "Commands enabled."}));
+                await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: "Commands enabled."}));
             }
         }
         else {

@@ -21,7 +21,7 @@ export class HelpCommand implements ICommandStructure {
     };
     async run(p: ICommandPayload): Promise<void> {
         if (!p.args[0]) {
-            const commandList = GlobalVars.commands.map((cmd) => {return `• ** ${cmd.conf.name}${cmd.conf.admin ? " [A]":""}** - ${cmd.conf.shortDescription}`});
+            const commandList = GlobalVars.commands.map((cmd) => {return `• **${cmd.conf.name}${cmd.conf.admin ? " [Admin]":""}${cmd.conf.nsfw ? " [Nsfw]":""}** - ${cmd.conf.shortDescription}`});
             p.msg.channel.send(`**Use \`${p.guild.prefix}help (commandname)\` to get help with a specific command.**\n\n${commandList.join("\n")}`);
         }
         else {
@@ -41,7 +41,7 @@ export class HelpCommand implements ICommandStructure {
             }
             await p.msg.channel.send(MessageBuilder.buildEmbed({
                 title: `__${c.conf.name}__ (Shorthand: ${c.conf.shorthands.join(", ")})`,
-                description: `*${c.conf.description}*${c.conf.admin ? "\n\n**This command is administrator exclusive.**" : ""}`,
+                description: `*${c.conf.description}*\n\n${c.conf.admin ? "**This command is administrator exclusive.**" : ""}\n${c.conf.nsfw ? "**This command can only be used in Nsfw channels.**" : ""}`,
                 fields: [{
                     name: "**Usage**",
                     value: `\`\`\`\n${p.guild.prefix}${argArr.join(" ")}\`\`\`\n`

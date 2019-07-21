@@ -9,6 +9,7 @@ import {AboutCommand} from "./commands/core/about";
 import {BotSettingsCommand} from "./commands/core/botsettings";
 import {PrefixCommand} from "./commands/core/prefix";
 import {UrbanDictionaryCommand} from "./commands/utils/urbandictionary";
+import {EvalCommand} from "./commands/core/eval";
 
 export class GlobalVars {
     public static db: Db;
@@ -19,7 +20,8 @@ export class GlobalVars {
         new AboutCommand(),
         new BotSettingsCommand(),
         new PrefixCommand(),
-        new UrbanDictionaryCommand()
+        new UrbanDictionaryCommand(),
+        new EvalCommand()
     ];
     public static cooldownSet = new Set();
     public static client = new Client({disableEveryone: true});
