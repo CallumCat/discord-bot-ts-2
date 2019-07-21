@@ -31,6 +31,7 @@ export class HelpCommand implements ICommandStructure {
             }
             let argArr = [c.conf.name];
             let argDesc = [];
+            let specialRequirementArr = [];
             for (let i = 0; i < c.conf.args.length; i++) {
                 if (c.conf.args[i].required) {
                     argArr.push(`<<${c.conf.args[i].argName}>>`);
@@ -39,22 +40,28 @@ export class HelpCommand implements ICommandStructure {
                 }
                 argDesc.push(`• ${c.conf.args[i].required ? "[Required] " : ""}**${c.conf.args[i].argName}** - ${c.conf.args[i].argDescription}`);
             }
+            if (c.conf.admin) {
+                specialRequirementArr.push("**• This command is administrator exclusive.**");
+            }
+            if (c.conf.nsfw) {
+                specialRequirementArr.push("**• This command can only be used in Nsfw channels.**");
+            }
             await p.msg.channel.send(MessageBuilder.buildEmbed({
                 title: `__${c.conf.name}__ (Shorthand: ${c.conf.shorthands.join(", ")})`,
-                description: `*${c.conf.description}*\n\n${c.conf.admin ? "**This command is administrator exclusive.**" : ""}\n${c.conf.nsfw ? "**This command can only be used in Nsfw channels.**" : ""}`,
+                description: `*${c.conf.description}*${specialRequirementArr.length > 0 ? `\n\n${specialRequirementArr.join("\n")}` : ""}`,
                 fields: [{
                     name: "**Usage**",
                     value: `\`\`\`\n${p.guild.prefix}${argArr.join(" ")}\`\`\`\n`
                 }, {
                     name: "**Arguments**",
-                    value: `${argDesc.length > 0 ? argDesc.join("\n") : "---"}`
+                    value: `${argDesc.length > 0 ? argDesc.join("\n") : "No arguments"}`
                 }, {
                     name: "**User Requires**",
-                    value: `\`\`\`\n${c.conf.userRequires ? c.conf.userRequires.join("\n") : "No additional permissions"}\`\`\``,
+                    value: `${c.conf.userRequires ? `\`\`\`\n${c.conf.userRequires.join("\n")}\`\`\`` : "No additional permissions"}`,
                     inline: true
                 }, {
                     name: "**Bot Requires**",
-                    value: `\`\`\`\n${c.conf.botRequires ? c.conf.botRequires.join("\n") : "No additional permissions"}\`\`\``,
+                    value: `${c.conf.botRequires ? `\`\`\`\n${c.conf.botRequires.join("\n")}\`\`\`` : "No additional permissions"}`,
                     inline: true
                 }]
             }))

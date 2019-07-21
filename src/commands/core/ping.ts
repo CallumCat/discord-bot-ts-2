@@ -13,6 +13,6 @@ export class PingCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        p.msg.channel.send(MessageBuilder.build({ emoji: ":signal_strength:", message: `Pong! (shard ${p.msg.guild.shard.id})`}));
+        p.msg.channel.send(MessageBuilder.build({ emoji: ":signal_strength:", message: `Pong! (shard ${p.msg.guild.shardID})`}));
     }
 }

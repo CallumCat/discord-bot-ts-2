@@ -13,10 +13,8 @@ export const config: IConfig = {
         userCollection: "users",
         guildCollection: "guilds",
         optionsCollection: "options",
-        shardStatusCollection: "shardstatus"
     },
     botOwnerId: "",
     defaultPrefix: "ts!",
     cooldownLengthMs: 3000,
-    shardCount: 2
 };

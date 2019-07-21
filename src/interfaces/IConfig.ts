@@ -11,10 +11,8 @@ export interface IConfig {
         userCollection: string;
         guildCollection: string;
         optionsCollection: string;
-        shardStatusCollection: string;
     }
     cooldownLengthMs: number;
     botOwnerId: string;
     defaultPrefix: string;
-    shardCount: number;
 }

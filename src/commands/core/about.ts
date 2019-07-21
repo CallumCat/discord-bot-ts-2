@@ -5,7 +5,7 @@ import {GlobalVars} from "../../global";
 export class AboutCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "about",
-        shorthands: ["a", "info"],
+        shorthands: ["a", "ab"],
         description: "Get complete information on the bot.",
         shortDescription: "Info about the bot",
         args: [],
@@ -13,6 +13,6 @@ export class AboutCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        p.msg.channel.send(`${GlobalVars.client.user.username} is built on https://github.com/ethanwritescode/discord-bot-ts-2. It was meant to demonstrate sharding and advanced help command structure in TypeScript.\n\nBot and source were developed by **Vysion#3272**.`);
+        p.msg.channel.send(`${GlobalVars.client.user.username} is built on https://github.com/ethanwritescode/discord-bot-ts-2. It is a bot framework for TypeScript and utilizes internal sharding.\n\nBot is maintained by **Vysion#3272**.`);
     }
 }
