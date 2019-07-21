@@ -1,7 +1,9 @@
 import {ICommandConfig, ICommandStructure} from "../../interfaces/ICommandStructure";
 import {ICommandPayload} from "../../interfaces/ICommandPayload";
 import {GlobalVars} from "../../global";
-import {table} from "table";
+import {getBorderCharacters, table} from "table";
+import {ShardStatusManager} from "../../utils/db/ShardStatusManager";
+import {Formatter} from "../../utils/Formatter";
 
 export class ShardsCommand implements ICommandStructure {
     conf: ICommandConfig = {
@@ -15,52 +17,35 @@ export class ShardsCommand implements ICommandStructure {
     };
     async run(p: ICommandPayload): Promise<void> {
         const shardDisplay: any[] = [
-            ["ID", "Guilds", "Users", "Status", "Ping"]
+            ["id", "guilds", "users", "status", "mem", "ping"]
         ];
 
+        const guildData = await GlobalVars.client.shard.broadcastEval("this.guilds.size");
+        const userData = await GlobalVars.client.shard.broadcastEval("this.users.size");
+        const clientPing = await GlobalVars.client.shard.broadcastEval("this.ws.ping");
+        const mem = await GlobalVars.client.shard.broadcastEval("process.memoryUsage().heapUsed");
+
+        const shardStatuses = await ShardStatusManager.getAll();
+
+        const shardStatusMap = shardStatuses.map((v) => {
+            return v.status
+        });
+
         let onlineShards = 0;
-        for (let i = 0; i < GlobalVars.client.ws.shards.size; i++) {
-            const thisShard = GlobalVars.client.ws.shards.find((v) => { return v.id === i });
-            let shardStatusReadable;
-            let gCount = 0;
-            let uCount = 0;
-            await GlobalVars.client.guilds.forEach((v) => {
-                if (v.shardID === thisShard.id) {
-                    gCount++;
-                    uCount += v.members.size;
-                }
-            });
-            switch(thisShard.status) {
-                case 0:
-                    shardStatusReadable = "READY";
-                    break;
-                case 1:
-                    shardStatusReadable = "CONNECTING";
-                    break;
-                case 2:
-                    shardStatusReadable = "RECONNECTING";
-                    break;
-                case 3:
-                    shardStatusReadable = "IDLE";
-                    break;
-                case 4:
-                    shardStatusReadable = "NEAR";
-                    break;
-                case 5:
-                    shardStatusReadable = "DISCONNECTED";
-            }
-            shardDisplay.push([thisShard.id, gCount, uCount, shardStatusReadable, `${Math.floor(thisShard.pings[0])}ms`]);
-            if (thisShard.status === 0) {
+        for (let i = 0; i < shardStatusMap.length; i++) {
+            shardDisplay.push([`${p.msg.guild.shardID === i ? `${i}<<` : i}`, guildData[i], userData[i], shardStatusMap[i], `${Formatter.formatBytes(mem[i])}`, `${Math.floor(clientPing[i])}ms`]);
+            if (shardStatusMap[i] === "ONLINE") {
                 onlineShards++;
             }
 
         }
-        shardDisplay.push(["---", GlobalVars.client.guilds.size, GlobalVars.client.users.size, `${onlineShards}/${GlobalVars.client.ws.shards.size}`, `${Math.floor(GlobalVars.client.ws.shards.reduce((a,b) => a + b.pings[0], 0) / GlobalVars.client.ws.shards.size)}ms avg.`]);
+        shardDisplay.push([`${shardStatusMap.length} tot.`, guildData.reduce((a,b) => {return a+b}), userData.reduce((a,b) => { return a+b}), `${onlineShards}/${shardStatusMap.length}`, `${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}`, `${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms avg.`]);
         //
         p.msg.channel.send(`\`\`\`py\n${table(shardDisplay, {
             drawHorizontalLine: (index, size) => {
                 return index === 0 || index === 1 || index === size - 1 || index === size;
-            }
+            },
+            border: getBorderCharacters("ramac")
         })}\`\`\``);
     }
 }

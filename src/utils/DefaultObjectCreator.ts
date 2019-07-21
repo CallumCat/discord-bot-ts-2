@@ -4,6 +4,7 @@ import * as moment from "moment";
 import {IOptions} from "../interfaces/IOptions";
 import {IGuild} from "../interfaces/IGuild";
 import {config} from "../config/config";
+import {IShardStatus} from "../interfaces/IShardStatus";
 
 export class DefaultObjectCreator {
     static createUserObject(id: Snowflake): IUser {
@@ -31,5 +32,11 @@ export class DefaultObjectCreator {
         return {
             commandsEnabled: true
         }
+    }
+    static createShardStatus(id: number): IShardStatus {
+        return {
+            id: id,
+            status: "NOT SET"
+        };
     }
 }
