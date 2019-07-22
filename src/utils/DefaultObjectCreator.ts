@@ -36,7 +36,7 @@ export class DefaultObjectCreator {
     static createShardStatus(id: number): IShardStatus {
         return {
             id: id,
-            status: "NOT SET",
+            status: "OFFLINE",
             lastUpdate: moment().format()
         };
     }

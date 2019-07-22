@@ -28,8 +28,8 @@ export class UpdateCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: "<:upull:602761121287503914>", message: `Pulling latest commits from remote repository...`})) as Message;
-        const o = await awaitExec("git fetch --all && git reset --hard origin/master").catch((e) => {
+        const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: "<:upull:602761121287503914>", message: `Pulling latest commits from remote repository and downloading new NPM packages. This may take a while.`})) as Message;
+        const o = await awaitExec("git fetch --all && git reset --hard origin/master && npm install").catch((e) => {
             throw new BotError(`Error fetching commits: ${e}`);
         });
         await m.edit(MessageBuilder.build({ emoji: "<:ubuild:602761120754827275>", message: `Successfully pulled latest commit. Building files...\n${o}`}));
