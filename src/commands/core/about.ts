@@ -13,6 +13,6 @@ export class AboutCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        p.msg.channel.send(`${GlobalVars.client.user.username} is built on https://github.com/ethanwritescode/discord-bot-ts-2. It is a bot framework for TypeScript and utilizes internal sharding.\n\nBot is maintained by **Vysion#3272**.`);
+        p.msg.channel.send(`${GlobalVars.client.user.username} is built on https://github.com/ethanwritescode/discord-bot-ts-2. It is a bot framework for TypeScript and utilizes sharding (even though the bot never hit 2.5k guilds lmao)\n\nBot is maintained by **Vysion#3272**.`);
     }
 }
