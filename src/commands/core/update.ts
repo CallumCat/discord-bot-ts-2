@@ -22,13 +22,9 @@ export class UpdateCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "update",
         shorthands: [],
-        description: "Pull recent commits from Github, build all files and then restart all shards. If any change is made inside app.ts the entire process must be manually reloaded via PM2. **DO NOT RUN THIS COMAMND IN ANY DIRECTORY WHICH HAS UNCOMMITED CHANGES.**",
+        description: "Pull recent commits from Github, build all files and then restart the process. If any change is made inside app.ts the entire process must be manually reloaded via PM2. **DO NOT RUN THIS COMAMND IN ANY DIRECTORY WHICH HAS UNCOMMITED CHANGES.**",
         shortDescription: "Update the bot & restart",
-        args: [{
-            argName: "all",
-            argDescription: "Restart the entire Node.js process instead of re-spawning shards.",
-            required: false
-        }],
+        args: [],
         admin: true,
         bypassCooldown: false
     };
@@ -41,13 +37,7 @@ export class UpdateCommand implements ICommandStructure {
         const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Successfully pulled latest commit. Building files...`})) as Message;
 
         await awaitExec("gulp build");
-
-        if (p.args[1] && p.args[1].toLowerCase() === "all") {
-            await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built. Restarting PM2 process.`}));
-            require('child_process').exec(`pm2 restart ${config.pm2ProcessName}`);
-        } else {
-            await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built. Restarting all shards (files outside of bot.ts scope will not have their changes reflected).`}));
-            await GlobalVars.shardingManager.respawnAll(5000, 500, 15000);
-        }
+        await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built successfully. Restarting PM2 process.\n\nThis will be the last message sent before the process exits.`}));
+        require('child_process').exec(`pm2 restart ${config.pm2ProcessName}`);
     }
 }
