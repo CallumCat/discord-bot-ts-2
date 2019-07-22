@@ -22,7 +22,7 @@ export class UpdateCommand implements ICommandStructure {
     };
     async run(p: ICommandPayload): Promise<void> {
         try {
-            require('child_process').exec("git reset --hard HEAD && git pull origin master");
+            require('child_process').exec("git fetch --all && git reset --hard origin/master");
         } catch(e) {
             throw new BotError(`Error pulling latest commit: ${e}`);
         }
