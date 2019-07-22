@@ -23,7 +23,7 @@ export class EvalCommand implements ICommandStructure {
         }
         try {
             const evResult = await eval(p.args.join(" "));
-            p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `\`\`\`js\n${JSON.stringify(evResult)}\`\`\``}))
+            p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Done.\n\`\`\`js\n${JSON.stringify(evResult)}\`\`\``}))
         } catch(e) {
             p.msg.channel.send(MessageBuilder.buildErr(`\`\`\`js\n${e}\`\`\``))
         }
