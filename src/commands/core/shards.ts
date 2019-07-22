@@ -48,8 +48,9 @@ export class ShardsCommand implements ICommandStructure {
                     emoji = "<:sr:602761121518190592>";
             }
             shardFields.push({
-                name: `${emoji} ${p.msg.guild.shardID === i ? `${i}<<` : i}`,
-                value: `\`\`\`py\nG: ${guildData[i]}\nU: ${shardStatusMap[i]}\nM: ${Formatter.formatBytes(mem[i])}\nP: ${Math.floor(clientPing[i])}ms\nU: ${ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))}\`\`\``
+                name: `${emoji} ${p.msg.guild.shardID === i ? `${i} (Current)` : i}`,
+                value: `\`\`\`py\nG: ${guildData[i]}\nU: ${shardStatusMap[i]}\nM: ${Formatter.formatBytes(mem[i])}\nP: ${Math.floor(clientPing[i])}ms\nU: ${ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))}\`\`\``,
+                inline: true
             });
             // shardDisplay.push([, , userData[i], shardStatusMap[i], ``, `${Math.floor(clientPing[i])}ms`, ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))]);
 
@@ -63,7 +64,7 @@ export class ShardsCommand implements ICommandStructure {
         //     border: getBorderCharacters("ramac")
         // })}\nI: ID\nG: Guilds cached\nU: Users cached\nS: Status\nM: Memory\nP: Avg. ping\nL: Last updated (L) ago\`\`\``);
         p.msg.channel.send(MessageBuilder.buildEmbed({
-            description: `\`\`\`py\nSHARD TOTAL: ${shardStatusMap.length}\nGUILD TOTAL: ${guildData.reduce((a,b) => {return a+b})}\nUSER TOTAL: ${userData.reduce((a,b) => { return a+b})}\nONLINE SHARDS: ${onlineShards}/${shardStatusMap.length}\nTOTAL MEM: ${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}\nPING AVG.: ${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms`,
+            description: `\`\`\`py\nSHARD TOTAL: ${shardStatusMap.length}\nGUILD TOTAL: ${guildData.reduce((a,b) => {return a+b})}\nUSER TOTAL: ${userData.reduce((a,b) => { return a+b})}\nONLINE SHARDS: ${onlineShards}/${shardStatusMap.length}\nTOTAL MEM: ${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}\nPING AVG.: ${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms\`\`\``,
             fields: shardFields
         }))
     }
