@@ -32,7 +32,7 @@ export class UpdateCommand implements ICommandStructure {
         const o = await awaitExec("git fetch --all && git reset --hard origin/master && npm install").catch((e) => {
             throw new BotError(`Error fetching commits: ${e}`);
         });
-        await m.edit(MessageBuilder.build({ emoji: "<:ubuild:602761120754827275>", message: `Successfully pulled latest commit. Building files...\n${o}`}));
+        await m.edit(MessageBuilder.build({ emoji: "<:ubuild:602761120754827275>", message: `Successfully pulled latest commit. Building files...\n\`\`\`${o}\`\`\``}));
         await awaitExec("gulp build");
         await m.edit(MessageBuilder.build({ emoji: "<:yes:602761121602207744>", message: `Files built successfully. Restarting PM2 process.\n*This will be the last message sent before the process exits.*`}));
         require('child_process').exec(`pm2 restart ${config.pm2ProcessName}`);

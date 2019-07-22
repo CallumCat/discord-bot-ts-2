@@ -49,7 +49,7 @@ export class ShardsCommand implements ICommandStructure {
             }
             shardFields.push({
                 name: `${emoji} ${p.msg.guild.shardID === i ? `${i} (Current)` : i}`,
-                value: `\`\`\`py\nG: ${guildData[i]}\nU: ${shardStatusMap[i]}\nM: ${Formatter.formatBytes(mem[i])}\nP: ${Math.floor(clientPing[i])}ms\nU: ${ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))}\`\`\``,
+                value: `\`\`\`py\nG: ${guildData[i]}\nU: ${userData[i]}\nS: ${shardStatusMap[i]}\nM: ${Formatter.formatBytes(mem[i])}\nP: ${Math.floor(clientPing[i])}ms\nL: ${ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))}\`\`\``,
                 inline: true
             });
             // shardDisplay.push([, , userData[i], shardStatusMap[i], ``, `${Math.floor(clientPing[i])}ms`, ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))]);
