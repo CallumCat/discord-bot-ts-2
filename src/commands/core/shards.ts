@@ -4,6 +4,8 @@ import {GlobalVars} from "../../global";
 import {getBorderCharacters, table} from "table";
 import {ShardStatusManager} from "../../utils/db/ShardStatusManager";
 import {Formatter} from "../../utils/Formatter";
+import moment from "moment";
+import ms from "ms";
 
 export class ShardsCommand implements ICommandStructure {
     conf: ICommandConfig = {
@@ -17,7 +19,7 @@ export class ShardsCommand implements ICommandStructure {
     };
     async run(p: ICommandPayload): Promise<void> {
         const shardDisplay: any[] = [
-            ["id", "guilds", "users", "status", "mem", "ping"]
+            ["I", "G", "U", "S", "M", "P", "L"]
         ];
 
         const guildData = await GlobalVars.client.shard.broadcastEval("this.guilds.size");
@@ -33,19 +35,19 @@ export class ShardsCommand implements ICommandStructure {
 
         let onlineShards = 0;
         for (let i = 0; i < shardStatusMap.length; i++) {
-            shardDisplay.push([`${p.msg.guild.shardID === i ? `${i}<<` : i}`, guildData[i], userData[i], shardStatusMap[i], `${Formatter.formatBytes(mem[i])}`, `${Math.floor(clientPing[i])}ms`]);
+            shardDisplay.push([`${p.msg.guild.shardID === i ? `${i}<<` : i}`, guildData[i], userData[i], shardStatusMap[i], `${Formatter.formatBytes(mem[i])}`, `${Math.floor(clientPing[i])}ms`, ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))]);
             if (shardStatusMap[i] === "ONLINE") {
                 onlineShards++;
             }
 
         }
-        shardDisplay.push([`${shardStatusMap.length} tot.`, guildData.reduce((a,b) => {return a+b}), userData.reduce((a,b) => { return a+b}), `${onlineShards}/${shardStatusMap.length}`, `${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}`, `${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms avg.`]);
+        shardDisplay.push([`${shardStatusMap.length}`, guildData.reduce((a,b) => {return a+b}), userData.reduce((a,b) => { return a+b}), `${onlineShards}/${shardStatusMap.length}`, `${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}`, `${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms A`, "---"]);
         //
         p.msg.channel.send(`\`\`\`py\n${table(shardDisplay, {
             drawHorizontalLine: (index, size) => {
                 return index === 0 || index === 1 || index === size - 1 || index === size;
             },
             border: getBorderCharacters("ramac")
-        })}\`\`\``);
+        })}\n\nI: ID\nG: Guilds Cached\nU: Users Cached\nS: Status\nM: Memory\nP: Avg. Ping\nL: Last Updated\`\`\``);
     }
 }

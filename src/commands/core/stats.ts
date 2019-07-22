@@ -2,7 +2,7 @@ import {ICommandConfig, ICommandStructure} from "../../interfaces/ICommandStruct
 import {ICommandPayload} from "../../interfaces/ICommandPayload";
 import {GlobalVars} from "../../global";
 import {MessageBuilder} from "../../utils/msg/MessageBuilder";
-import * as moment from "moment";
+import moment from "moment";
 import {Formatter} from "../../utils/Formatter";
 
 export class StatsCommand implements ICommandStructure {

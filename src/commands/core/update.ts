@@ -22,7 +22,7 @@ export class UpdateCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "update",
         shorthands: [],
-        description: "Pull recent commits from Github, build all files and then restart all shards. If any change is made inside app.ts the entire process must be manually reloaded via PM2. **DO NOT RUN THIS COMAMND IN THE TESTING ENVIRONMENT.**",
+        description: "Pull recent commits from Github, build all files and then restart all shards. If any change is made inside app.ts the entire process must be manually reloaded via PM2. **DO NOT RUN THIS COMAMND IN ANY DIRECTORY WHICH HAS UNCOMMITED CHANGES.**",
         shortDescription: "Update the bot & restart",
         args: [{
             argName: "all",

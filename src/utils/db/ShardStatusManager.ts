@@ -2,6 +2,7 @@ import {DefaultObjectCreator} from "../DefaultObjectCreator";
 import {GlobalVars} from "../../global";
 import {IShardStatus} from "../../interfaces/IShardStatus";
 import {config} from "../../config/config";
+import moment from "moment";
 
 export class ShardStatusManager {
     static async resetAndSet(): Promise<void> {
@@ -12,7 +13,7 @@ export class ShardStatusManager {
         }
     }
     static async update(id: number, newStatus: string): Promise<void> {
-        await GlobalVars.db.collection(config.db.shardStatusCollection).updateOne({ id: id }, { $set: { status: newStatus }});
+        await GlobalVars.db.collection(config.db.shardStatusCollection).updateOne({ id: id }, { $set: { status: newStatus, lastUpdate: moment().format() }});
     }
     static async getAll(): Promise<IShardStatus[]> {
         let shardDocs: IShardStatus[] = [];

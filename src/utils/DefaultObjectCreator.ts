@@ -1,6 +1,6 @@
 import {IUser} from "../interfaces/IUser";
 import {Snowflake} from "discord.js";
-import * as moment from "moment";
+import  moment from "moment";
 import {IOptions} from "../interfaces/IOptions";
 import {IGuild} from "../interfaces/IGuild";
 import {config} from "../config/config";
@@ -36,7 +36,8 @@ export class DefaultObjectCreator {
     static createShardStatus(id: number): IShardStatus {
         return {
             id: id,
-            status: "NOT SET"
+            status: "NOT SET",
+            lastUpdate: moment().format()
         };
     }
 }
