@@ -6,6 +6,18 @@ import {config} from "../../config/config";
 import {Message} from "discord.js";
 import {GlobalVars} from "../../global";
 
+async function awaitExec(cmd: string) {
+    return await new Promise((resolve, reject)=> {
+        require('child_process').exec(cmd, (error: Error, stdout: string, stderr: string) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(stdout)
+        });
+    });
+}
+
 export class UpdateCommand implements ICommandStructure {
     conf: ICommandConfig = {
         name: "update",
@@ -22,12 +34,11 @@ export class UpdateCommand implements ICommandStructure {
     };
     async run(p: ICommandPayload): Promise<void> {
         try {
-            require('child_process').exec("git fetch --all && git reset --hard origin/master");
+            await awaitExec("git fetch --all && git reset --hard origin/master");
         } catch(e) {
             throw new BotError(`Error pulling latest commit: ${e}`);
         }
         const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Successfully pulled latest commit. Building files...`})) as Message;
-        await require('child_process').exec("gulp build");
 
         if (p.args[1] && p.args[1].toLowerCase() === "all") {
             await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built. Restarting PM2 process.`}));
