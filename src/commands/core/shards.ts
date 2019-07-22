@@ -48,6 +48,6 @@ export class ShardsCommand implements ICommandStructure {
                 return index === 0 || index === 1 || index === size - 1 || index === size;
             },
             border: getBorderCharacters("ramac")
-        })}\n\nI: ID\nG: Guilds Cached\nU: Users Cached\nS: Status\nM: Memory\nP: Avg. Ping\nL: Last Updated\`\`\``);
+        })}\nI: ID\nG: Guilds cached\nU: Users cached\nS: Status\nM: Memory\nP: Avg. ping\nL: Last updated (L) ago\`\`\``);
     }
 }
