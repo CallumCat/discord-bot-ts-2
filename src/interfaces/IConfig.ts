@@ -17,4 +17,5 @@ export interface IConfig {
     botOwnerId: string;
     defaultPrefix: string;
     shardCount: number;
+    pm2ProcessName: string;
 }

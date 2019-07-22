@@ -18,5 +18,6 @@ export const config: IConfig = {
     botOwnerId: "",
     defaultPrefix: "ts!",
     cooldownLengthMs: 3000,
-    shardCount: 2
+    shardCount: 2,
+    pm2ProcessName: "your-process-name"
 };

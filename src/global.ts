@@ -11,6 +11,7 @@ import {UrbanDictionaryCommand} from "./commands/utils/urbandictionary";
 import {EvalCommand} from "./commands/core/eval";
 import {StatsCommand} from "./commands/core/stats";
 import * as path from "path";
+import {UpdateCommand} from "./commands/core/update";
 
 export class GlobalVars {
     public static db: Db;
@@ -23,7 +24,8 @@ export class GlobalVars {
         new PrefixCommand(),
         new UrbanDictionaryCommand(),
         new EvalCommand(),
-        new StatsCommand()
+        new StatsCommand(),
+        new UpdateCommand()
     ];
     public static cooldownSet = new Set();
     public static client = new Client({disableEveryone: true});
