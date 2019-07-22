@@ -40,6 +40,8 @@ export class UpdateCommand implements ICommandStructure {
         }
         const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Successfully pulled latest commit. Building files...`})) as Message;
 
+        await awaitExec("gulp build");
+
         if (p.args[1] && p.args[1].toLowerCase() === "all") {
             await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built. Restarting PM2 process.`}));
             require('child_process').exec(`pm2 restart ${config.pm2ProcessName}`);
