@@ -6,6 +6,8 @@ import {ShardStatusManager} from "../../utils/db/ShardStatusManager";
 import {Formatter} from "../../utils/Formatter";
 import moment from "moment";
 import ms from "ms";
+import {MessageBuilder} from "../../utils/msg/MessageBuilder";
+import {EmbedField} from "discord.js";
 
 export class ShardsCommand implements ICommandStructure {
     conf: ICommandConfig = {
@@ -18,9 +20,7 @@ export class ShardsCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        const shardDisplay: any[] = [
-            ["I", "G", "U", "S", "M", "P", "L"]
-        ];
+        const shardFields: EmbedField[] = [];
 
         const guildData = await GlobalVars.client.shard.broadcastEval("this.guilds.size");
         const userData = await GlobalVars.client.shard.broadcastEval("this.users.size");
@@ -35,19 +35,36 @@ export class ShardsCommand implements ICommandStructure {
 
         let onlineShards = 0;
         for (let i = 0; i < shardStatusMap.length; i++) {
-            shardDisplay.push([`${p.msg.guild.shardID === i ? `${i}<<` : i}`, guildData[i], userData[i], shardStatusMap[i], `${Formatter.formatBytes(mem[i])}`, `${Math.floor(clientPing[i])}ms`, ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))]);
-            if (shardStatusMap[i] === "ONLINE") {
-                onlineShards++;
+            let emoji = "";
+            switch(shardStatusMap[i]) {
+                case "ONLINE":
+                    onlineShards++;
+                    emoji = "<:so:602761121392492546>";
+                    break;
+                case "OFFLINE" || "ERROR":
+                    emoji = "<:sx:602761121509670932>";
+                    break;
+                case "RECONNECT":
+                    emoji = "<:sr:602761121518190592>";
             }
+            shardFields.push({
+                name: `${emoji} ${p.msg.guild.shardID === i ? `${i}<<` : i}`,
+                value: `\`\`\`py\nG: ${guildData[i]}\nU: ${shardStatusMap[i]}\nM: ${Formatter.formatBytes(mem[i])}\nP: ${Math.floor(clientPing[i])}ms\nU: ${ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))}\`\`\``
+            });
+            // shardDisplay.push([, , userData[i], shardStatusMap[i], ``, `${Math.floor(clientPing[i])}ms`, ms(parseInt(moment().format("x")) - parseInt(moment(shardStatuses[i].lastUpdate).format("x")))]);
 
         }
-        shardDisplay.push([`${shardStatusMap.length}`, guildData.reduce((a,b) => {return a+b}), userData.reduce((a,b) => { return a+b}), `${onlineShards}/${shardStatusMap.length}`, `${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}`, `${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms A`, "---"]);
+        // shardDisplay.push([`${shardStatusMap.length}`, guildData.reduce((a,b) => {return a+b}), userData.reduce((a,b) => { return a+b}), `${onlineShards}/${shardStatusMap.length}`, `${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}`, `${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms A`, "---"]);
         //
-        p.msg.channel.send(`\`\`\`py\n${table(shardDisplay, {
-            drawHorizontalLine: (index, size) => {
-                return index === 0 || index === 1 || index === size - 1 || index === size;
-            },
-            border: getBorderCharacters("ramac")
-        })}\nI: ID\nG: Guilds cached\nU: Users cached\nS: Status\nM: Memory\nP: Avg. ping\nL: Last updated (L) ago\`\`\``);
+        // p.msg.channel.send(`\`\`\`py\n${table(shardDisplay, {
+        //     drawHorizontalLine: (index, size) => {
+        //         return index === 0 || index === 1 || index === size - 1 || index === size;
+        //     },
+        //     border: getBorderCharacters("ramac")
+        // })}\nI: ID\nG: Guilds cached\nU: Users cached\nS: Status\nM: Memory\nP: Avg. ping\nL: Last updated (L) ago\`\`\``);
+        p.msg.channel.send(MessageBuilder.buildEmbed({
+            description: `\`\`\`py\nSHARD TOTAL: ${shardStatusMap.length}\nGUILD TOTAL: ${guildData.reduce((a,b) => {return a+b})}\nUSER TOTAL: ${userData.reduce((a,b) => { return a+b})}\nONLINE SHARDS: ${onlineShards}/${shardStatusMap.length}\nTOTAL MEM: ${Formatter.formatBytes(mem.reduce((a,b) => { return a+b}))}\nPING AVG.: ${Math.floor(clientPing.reduce((a,b) => a + b, 0) / clientPing.length)}ms`,
+            fields: shardFields
+        }))
     }
 }

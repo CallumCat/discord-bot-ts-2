@@ -30,7 +30,7 @@ export class PrefixCommand implements ICommandStructure {
                 throw new BotError("Prefix should be 8 characters or lower.");
             }
             await GlobalVars.db.collection(config.db.guildCollection).updateOne({ id: p.guild.id }, {$set: { prefix: p.args[0].toLowerCase() }});
-            p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Guild prefix successfully changed to \`${p.args[0].toLowerCase()}\`.`}))
+            p.msg.channel.send(MessageBuilder.build({ emoji: "<:yes:602761121602207744>", message: `Guild prefix successfully changed to \`${p.args[0].toLowerCase()}\`.`}))
         }
     }
 }

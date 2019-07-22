@@ -4,7 +4,6 @@ import {BotError} from "../../utils/ErrorHandler";
 import {MessageBuilder} from "../../utils/msg/MessageBuilder";
 import {config} from "../../config/config";
 import {Message} from "discord.js";
-import {GlobalVars} from "../../global";
 
 async function awaitExec(cmd: string) {
     return await new Promise((resolve, reject)=> {
@@ -29,15 +28,13 @@ export class UpdateCommand implements ICommandStructure {
         bypassCooldown: false
     };
     async run(p: ICommandPayload): Promise<void> {
-        try {
-            await awaitExec("git fetch --all && git reset --hard origin/master");
-        } catch(e) {
-            throw new BotError(`Error pulling latest commit: ${e}`);
-        }
-        const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Successfully pulled latest commit. Building files...`})) as Message;
-
+        const m: Message = await p.msg.channel.send(MessageBuilder.build({ emoji: "<:upull:602761121287503914>", message: `Pulling latest commits from remote repository...`})) as Message;
+        const o = await awaitExec("git fetch --all && git reset --hard origin/master").catch((e) => {
+            throw new BotError(`Error fetching commits: ${e}`);
+        });
+        await m.edit(MessageBuilder.build({ emoji: "<:ubuild:602761120754827275>", message: `Successfully pulled latest commit. Building files...\n${o}`}));
         await awaitExec("gulp build");
-        await m.edit(MessageBuilder.build({ emoji: ":white_check_mark:", message: `Files built successfully. Restarting PM2 process.\n\nThis will be the last message sent before the process exits.`}));
+        await m.edit(MessageBuilder.build({ emoji: "<:yes:602761121602207744>", message: `Files built successfully. Restarting PM2 process.\n*This will be the last message sent before the process exits.*`}));
         require('child_process').exec(`pm2 restart ${config.pm2ProcessName}`);
     }
 }
